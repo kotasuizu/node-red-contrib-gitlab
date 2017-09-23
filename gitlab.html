@@ -1,0 +1,94 @@
+<!--
+  Copyright (c) 2017 Kota Suizu
+  Released under the MIT license
+  http://opensource.org/licenses/mit-license.php
+-->
+
+<script type="text/x-red" data-template-name="gitlab-config">
+  <div class="form-row">
+    <label for="node-config-input-url"><i class="fa fa-bookmark"></i> API URL</label>
+    <input type="text" id="node-config-input-url" placeholder="GitLab API URL">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-key"><i class="fa fa-lock"></i> Token</label>
+    <input type="password" id="node-config-input-key" placeholder="Personal Access Token">
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-config-input-name" placeholder="Name">
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('gitlab-config', {
+    category: "config",
+    color: "rgb(114, 199, 231)",
+    defaults: {
+      url: {
+        value: "",
+        required: true
+      },
+      name: {
+        value: ""
+      }
+    },
+    credentials: {
+      key: {
+        type: "password",
+        required: true
+      }
+    },
+    label: function() {
+      return this.name;
+    }
+  });
+</script>
+
+
+
+<script type="text/x-red" data-template-name="GitLab-Issues-List">
+  <div class="form-row">
+    <label for="node-input-gitlabconfig"><i class="fa fa-globe"></i> API Key</label>
+    <input type="text" id="node-input-gitlabconfig">
+  </div>
+  <div class="form-row">
+    <label for="node-input-projectid"><i class="fa fa-tag"></i> Project ID</label>
+    <input type="text" id="node-input-projectid" placeholder="ProjectID">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="GitLab-Issues-List">
+  <p>Get a list of project issues.</p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('GitLab-Issues-List', {
+    category: 'GitLab',
+    defaults: {
+      name: {
+        value: ""
+      },
+      projectid: {
+        value: ""
+      },
+      gitlabconfig: {
+        type: "gitlab-config",
+        required: true
+      }
+    },
+    color: "#a493d4",
+    inputs: 1,
+    outputs: 1,
+    icon: "gitlab_logo.svg",
+    label: function() {
+      return this.name || "GitLab Issues List";
+    },
+    labelStyle: function() {
+      return this.name ? "node_label_italic" : "";
+    }
+  });
+</script>
