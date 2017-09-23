@@ -8,7 +8,7 @@ module.exports = function(RED) {
   "use strict";
   var gitlab = require('node-gitlab');
 
-  // APIKey情報を保持するConfig
+  // API情報を保持するConfig
   function gitlabConfig(n) {
     RED.nodes.createNode(this, n);
     this.key = n.key;
@@ -26,7 +26,7 @@ module.exports = function(RED) {
     }
   });
 
-  // GitLab-Talk NodeIO処理
+  // GitLab Issues List 処理
   function GitLabIssuesList(n) {
     RED.nodes.createNode(this, n);
 
