@@ -4,9 +4,12 @@
   http://opensource.org/licenses/mit-license.php
 -->
 
+<!--
+  GitLab API Config
+-->
 <script type="text/x-red" data-template-name="gitlab-config">
   <div class="form-row">
-    <label for="node-config-input-url"><i class="fa fa-bookmark"></i> API URL</label>
+    <label for="node-config-input-url"><i class="fa fa-globe"></i> API URL</label>
     <input type="text" id="node-config-input-url" placeholder="GitLab API URL">
   </div>
   <div class="form-row">
@@ -14,9 +17,27 @@
     <input type="password" id="node-config-input-key" placeholder="Personal Access Token">
   </div>
   <div class="form-row">
+    <label for="node-config-input-project_id"><i class="fa fa-bookmark"></i> Project ID</label>
+    <input type="text" id="node-config-input-project_id" placeholder="ProjectID">
+  </div>
+  <div class="form-row">
     <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-config-input-name" placeholder="Name">
   </div>
+</script>
+
+<script type="text/x-red" data-help-name="gitlab-config">
+  <p>GitLab APIs Config</p>
+  <p>
+    Set the following in the node setting.:
+    <ul>
+      <li><code>API URL</code> :
+        <Strong>(required String)</Strong> GitLab API URL. (e.g. https://gitlab.com/api/v3, https://git.ng.bluemix.net/api/v3)</li>
+      <li><code>Token</code> :
+        <Strong>(required String)</Strong> Personal Access Token</li>
+      <li><code>Project ID</code> : (Number) The ID of a project</li>
+    </ul>
+  </p>
 </script>
 
 <script type="text/javascript">
@@ -27,6 +48,9 @@
       url: {
         value: "",
         required: true
+      },
+      project_id: {
+        value: ""
       },
       name: {
         value: ""
@@ -46,14 +70,43 @@
 
 
 
-<script type="text/x-red" data-template-name="GitLab-Issues-List">
+<!--
+  GitLab API List Issues
+-->
+<script type="text/x-red" data-template-name="GitLab-List-Issues">
   <div class="form-row">
     <label for="node-input-gitlabconfig"><i class="fa fa-globe"></i> API Key</label>
     <input type="text" id="node-input-gitlabconfig">
   </div>
   <div class="form-row">
-    <label for="node-input-projectid"><i class="fa fa-tag"></i> Project ID</label>
-    <input type="text" id="node-input-projectid" placeholder="ProjectID">
+    <label for="node-input-state"><i class="fa fa-tag"></i> State</label>
+    <select type="text" id="node-input-state">
+        <option value="all">all</option>
+        <option value="opened">opened</option>
+        <option value="closed">closed</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-labels"><i class="fa fa-tag"></i> Labels</label>
+    <input type="text" id="node-input-labels" placeholder="Labels">
+  </div>
+  <div class="form-row">
+    <label for="node-input-milestone"><i class="fa fa-tag"></i> Milestone</label>
+    <input type="text" id="node-input-milestone" placeholder="Milestone">
+  </div>
+  <div class="form-row">
+    <label for="node-input-order_by"><i class="fa fa-tag"></i> Order By</label>
+    <select type="text" id="node-input-order_by">
+        <option value="created_at">created_at</option>
+        <option value="updated_at">updated_at</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-sort"><i class="fa fa-tag"></i> Sort</label>
+    <select type="text" id="node-input-sort">
+        <option value="desc">desc</option>
+        <option value="asc">asc</option>
+    </select>
   </div>
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -61,18 +114,101 @@
   </div>
 </script>
 
-<script type="text/x-red" data-help-name="GitLab-Issues-List">
+<script type="text/x-red" data-help-name="GitLab-List-Issues">
   <p>Get a list of project issues.</p>
+  <p>
+    Set the following in the node setting or in the input payload.:
+    <ul>
+      <li><code>msg.payload.project_id</code> :
+        <Strong>(required Number)</Strong> The ID of a project</li>
+      <li><code>msg.payload.iid</code> : (Number) Return the issue having the given Issue ID (iid)</li>
+      <li><code>msg.payload.state</code> : (String) Return all issues or just those that are opened or closed</li>
+      <li><code>msg.payload.labels</code> : (String) Comma-separated list of label names</li>
+      <li><code>msg.payload.milestone</code> : (String) Milestone title</li>
+      <li><code>msg.payload.order_by</code> : (String) Return requests ordered by created_at or updated_at fields. Default is created_at</li>
+      <li><code>msg.payload.sort</code> : (String) Return requests sorted in asc or desc order. Default is desc</li>
+    </ul>
+  </p>
 </script>
 
 <script type="text/javascript">
-  RED.nodes.registerType('GitLab-Issues-List', {
+  RED.nodes.registerType('GitLab-List-Issues', {
     category: 'GitLab',
     defaults: {
       name: {
         value: ""
       },
-      projectid: {
+      state: {
+        value: "all"
+      },
+      labels: {
+        value: ""
+      },
+      milestone: {
+        value: ""
+      },
+      order_by: {
+        value: "created_at"
+      },
+      sort: {
+        value: "desc"
+      },
+      gitlabconfig: {
+        type: "gitlab-config",
+        required: true
+      }
+    },
+    color: "#a493d4",
+    inputs: 1,
+    outputs: 1,
+    icon: "gitlab_logo.svg",
+    label: function() {
+      return this.name || "GitLab List Issues";
+    },
+    labelStyle: function() {
+      return this.name ? "node_label_italic" : "";
+    }
+  });
+</script>
+
+
+
+<!--
+  GitLab API Create Issue
+-->
+<script type="text/x-red" data-template-name="GitLab-Create-Issue">
+  <div class="form-row">
+    <label for="node-input-gitlabconfig"><i class="fa fa-globe"></i> API Key</label>
+    <input type="text" id="node-input-gitlabconfig">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="GitLab-Create-Issue">
+  <p>Creates a new project issue.</p>
+  <p>
+    Set the following in the node setting or in the input payload.:
+    <ul>
+      <li><code>msg.payload.project_id</code> :
+        <Strong>(required Number)</Strong> The ID of a project</li>
+      <li><code>msg.payload.title</code> :
+        <Strong>(required String)</Strong> The title of an issue</li>
+      <li><code>msg.payload.description</code> : (String) The description of an issue</li>
+      <li><code>msg.payload.assignee_id</code> : (Number) The ID of a user to assign issue</li>
+      <li><code>msg.payload.milestone_id</code> : (Number) The ID of a milestone to assign issue</li>
+      <li><code>msg.payload.labels</code> : (String) Comma-separated label names for an issue</li>
+    </ul>
+  </p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('GitLab-Create-Issue', {
+    category: 'GitLab',
+    defaults: {
+      name: {
         value: ""
       },
       gitlabconfig: {
@@ -85,7 +221,235 @@
     outputs: 1,
     icon: "gitlab_logo.svg",
     label: function() {
-      return this.name || "GitLab Issues List";
+      return this.name || "GitLab Create Issue";
+    },
+    labelStyle: function() {
+      return this.name ? "node_label_italic" : "";
+    }
+  });
+</script>
+
+
+
+<!--
+  GitLab API Update Issue
+-->
+<script type="text/x-red" data-template-name="GitLab-Update-Issue">
+  <div class="form-row">
+    <label for="node-input-gitlabconfig"><i class="fa fa-globe"></i> API Key</label>
+    <input type="text" id="node-input-gitlabconfig">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="GitLab-Update-Issue">
+  <p>Update a project issue.</p>
+  <p>
+    Set the following in the node setting or in the input payload.:
+    <ul>
+      <li><code>msg.payload.project_id</code> :
+        <Strong>(required Number)</Strong> The ID of a project</li>
+      <li><code>msg.payload.issue_id</code> :
+        <Strong>(required Number)</Strong> The ID of a project issue</li>
+      <li><code>msg.payload.title</code> : (String) The title of an issue</li>
+      <li><code>msg.payload.description</code> : (String) The description of an issue</li>
+      <li><code>msg.payload.assignee_id</code> : (Number) The ID of a user to assign issue</li>
+      <li><code>msg.payload.milestone_id</code> : (Number) The ID of a milestone to assign issue</li>
+      <li><code>msg.payload.labels</code> : (String) Comma-separated label names for an issue</li>
+      <li><code>msg.payload.state_event</code> : (String) The state event of an issue (&#39;close&#39; to close issue and &#39;reopen&#39; to reopen it)</li>
+    </ul>
+  </p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('GitLab-Update-Issue', {
+    category: 'GitLab',
+    defaults: {
+      name: {
+        value: ""
+      },
+      gitlabconfig: {
+        type: "gitlab-config",
+        required: true
+      }
+    },
+    color: "#a493d4",
+    inputs: 1,
+    outputs: 1,
+    icon: "gitlab_logo.svg",
+    label: function() {
+      return this.name || "GitLab Update Issue";
+    },
+    labelStyle: function() {
+      return this.name ? "node_label_italic" : "";
+    }
+  });
+</script>
+
+
+
+<!--
+  GitLab API List Notes
+-->
+<script type="text/x-red" data-template-name="GitLab-List-Notes">
+  <div class="form-row">
+    <label for="node-input-gitlabconfig"><i class="fa fa-globe"></i> API Key</label>
+    <input type="text" id="node-input-gitlabconfig">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="GitLab-List-Notes">
+  <p>Gets a list of all notes for a single issue..</p>
+  <p>
+    Set the following in the node setting or in the input payload.:
+    <ul>
+      <li><code>msg.payload.project_id</code> :
+        <Strong>(required Number)</Strong> The ID of a project</li>
+      <li><code>msg.payload.issue_id</code> :
+        <Strong>(required Number)</Strong> The ID of a project issue</li>
+    </ul>
+  </p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('GitLab-List-Notes', {
+    category: 'GitLab',
+    defaults: {
+      name: {
+        value: ""
+      },
+      gitlabconfig: {
+        type: "gitlab-config",
+        required: true
+      }
+    },
+    color: "#a493d4",
+    inputs: 1,
+    outputs: 1,
+    icon: "gitlab_logo.svg",
+    label: function() {
+      return this.name || "GitLab List Notes";
+    },
+    labelStyle: function() {
+      return this.name ? "node_label_italic" : "";
+    }
+  });
+</script>
+
+
+
+<!--
+  GitLab API Create Note
+-->
+<script type="text/x-red" data-template-name="GitLab-Create-Note">
+  <div class="form-row">
+    <label for="node-input-gitlabconfig"><i class="fa fa-globe"></i> API Key</label>
+    <input type="text" id="node-input-gitlabconfig">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="GitLab-Create-Note">
+  <p>Creates a new note to a single project issue.</p>
+  <p>
+    Set the following in the node setting or in the input payload.:
+    <ul>
+      <li><code>msg.payload.project_id</code> :
+        <Strong>(required Number)</Strong> The ID of a project</li>
+      <li><code>msg.payload.issue_id</code> :
+        <Strong>(required Number)</Strong> The ID of a project issue</li>
+      <li><code>msg.payload.body</code> :
+        <Strong>(required String)</Strong> The content of a note</li>
+    </ul>
+  </p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('GitLab-Create-Note', {
+    category: 'GitLab',
+    defaults: {
+      name: {
+        value: ""
+      },
+      gitlabconfig: {
+        type: "gitlab-config",
+        required: true
+      }
+    },
+    color: "#a493d4",
+    inputs: 1,
+    outputs: 1,
+    icon: "gitlab_logo.svg",
+    label: function() {
+      return this.name || "GitLab Create Note";
+    },
+    labelStyle: function() {
+      return this.name ? "node_label_italic" : "";
+    }
+  });
+</script>
+
+
+
+<!--
+  GitLab API Update Note
+-->
+<script type="text/x-red" data-template-name="GitLab-Update-Note">
+  <div class="form-row">
+    <label for="node-input-gitlabconfig"><i class="fa fa-globe"></i> API Key</label>
+    <input type="text" id="node-input-gitlabconfig">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="GitLab-Update-Note">
+  <p>Modify existing note of an issue.</p>
+  <p>
+    Set the following in the node setting or in the input payload.:
+    <ul>
+      <li><code>msg.payload.project_id</code> :
+        <Strong>(required Number)</Strong> The ID of a project</li>
+      <li><code>msg.payload.issue_id</code> :
+        <Strong>(required Number)</Strong> The ID of a project issue</li>
+      <li><code>msg.payload.note_id</code> :
+        <Strong>(required Number)</Strong> The ID of a note</li>
+      <li><code>msg.payload.body</code> :
+        <Strong>(required String)</Strong> The content of a note</li>
+    </ul>
+  </p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('GitLab-Update-Note', {
+    category: 'GitLab',
+    defaults: {
+      name: {
+        value: ""
+      },
+      gitlabconfig: {
+        type: "gitlab-config",
+        required: true
+      }
+    },
+    color: "#a493d4",
+    inputs: 1,
+    outputs: 1,
+    icon: "gitlab_logo.svg",
+    label: function() {
+      return this.name || "GitLab Update Note";
     },
     labelStyle: function() {
       return this.name ? "node_label_italic" : "";

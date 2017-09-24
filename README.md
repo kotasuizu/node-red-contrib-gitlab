@@ -14,8 +14,13 @@ https://nodered.org/docs/getting-started/adding-nodes
 
 The following functions(APIs) can be used:  
 
-### Issues
-* List issues
+### Project Issues
+* List issues : Get a list of project issues.
+* Create issue : Creates a new project issue.
+* Update issue : Updates an existing project issue. This function is also used to mark an issue as closed.
+* List notes of an issue : Gets a list of all notes for a single issue.
+* Create note of an issue : Creates a new note to a single project issue.
+* Update note of an issue : Modify existing note of an issue.
 
 ## Copyright and license
 
