@@ -32,7 +32,7 @@ module.exports = function(RED) {
   });
 
 
-
+// === Issues =================================================================
   /**
    * GitLab API Issues List
    **/
@@ -399,6 +399,58 @@ module.exports = function(RED) {
   }
   RED.nodes.registerType("GitLab-Update-Note", GitLabUpdateNote);
 
+
+
+// === RepositoryFiles ========================================================
+/**
+ * GitLab API List Notes
+ **/
+function GitLabGetRepositoryFile(n) {
+  RED.nodes.createNode(this, n);
+
+  this.gitlabConfig = RED.nodes.getNode(n.gitlabconfig);
+  this.ref = n.ref;
+
+  var node = this;
+  this.on('input', function(msg) {
+
+    // Update if MSG has a value
+    var project_id = node.gitlabConfig.project_id;
+    if (_isTypeOf('Number', msg.payload.project_id)) {
+      project_id = msg.payload.project_id;
+    }
+    var ref = node.ref;
+    if (_isTypeOf('String', msg.payload.ref)) {
+      ref = msg.payload.ref;
+    }
+
+    var file_path;
+    if (_isTypeOf('String', msg.payload.file_path)) {
+      file_path = msg.payload.file_path;
+    }
+
+    var client = gitlab.create({
+      api: node.gitlabConfig.url,
+      privateToken: node.gitlabConfig.key
+    });
+    client.repositoryFiles.get({
+      id: project_id,
+      ref: ref,
+      file_path: file_path
+    }, function(error, body) {
+      if (!error) {
+        msg.payload = body;
+        node.send(msg);
+        node.log(RED._('Succeeded to API Call.'));
+      } else {
+        console.log(error);
+        node.error("Failed to API Call. " + error);
+      }
+    });
+
+  });
+}
+RED.nodes.registerType("GitLab-Get-RepositoryFile", GitLabGetRepositoryFile);
 
 
   /**

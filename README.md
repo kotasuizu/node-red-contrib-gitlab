@@ -22,6 +22,9 @@ The following functions(APIs) can be used:
 * Create note of an issue : Creates a new note to a single project issue.
 * Update note of an issue : Modify existing note of an issue.
 
+### Repository Files
+* Get File : Get file from repository. Allows you to receive information about file in repository like name, size, content. Note that file content is Base64 encoded.
+
 ## Copyright and license
 
 Copyright (c) 2017 Kota Suizu  

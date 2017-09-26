@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-gitlab",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Node-RED node using GitLab APIs",
   "dependencies": {
     "node-gitlab": "^1.6.0"
