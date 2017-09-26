@@ -491,8 +491,8 @@
         <Strong>(required Number)</Strong> The ID of a project</li>
       <li><code>msg.payload.file_path</code> :
         <Strong>(required String)</Strong> Full path to file. </li>
-        <li><code>msg.payload.ref</code> :
-          <Strong>(required String)</Strong> The name of branch, tag or commit</li>
+      <li><code>msg.payload.ref</code> :
+        <Strong>(required String)</Strong> The name of branch, tag or commit</li>
     </ul>
   </p>
 </script>
@@ -518,6 +518,227 @@
     icon: "gitlab_logo.svg",
     label: function() {
       return this.name || "GitLab Get RepositoryFile";
+    },
+    labelStyle: function() {
+      return this.name ? "node_label_italic" : "";
+    }
+  });
+</script>
+
+
+
+<!--
+  GitLab Create RepositoryFile
+-->
+<script type="text/x-red" data-template-name="GitLab-Create-RepositoryFile">
+  <div class="form-row">
+    <label for="node-input-gitlabconfig"><i class="fa fa-globe"></i> API Key</label>
+    <input type="text" id="node-input-gitlabconfig">
+  </div>
+  <div class="form-row">
+    <label for="node-input-branch_name"><i class="fa fa-tag"></i> Branch</label>
+    <input type="text" id="node-input-branch_name" placeholder="The name of branch,">
+  </div>
+  <div class="form-row">
+    <label for="node-input-encoding"><i class="fa fa-tag"></i> Encoding</label>
+    <select type="text" id="node-input-encoding">
+        <option value="text">text</option>
+        <option value="base64">base64</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="GitLab-Create-RepositoryFile">
+  <p>Create new file in repository</p>
+  <p>
+    Set the following in the node setting or in the input payload.:
+    <ul>
+      <li><code>msg.payload.project_id</code> :
+        <Strong>(required Number)</Strong> The ID of a project</li>
+      <li><code>msg.payload.file_path</code> :
+        <Strong>(required String)</Strong> Full path to file. </li>
+      <li><code>msg.payload.branch_name</code> :
+        <Strong>(required String)</Strong> The name of branch</li>
+      <li><code>msg.payload.encoding</code> : (String) Select encoding to &#39;text&#39; or &#39;base64&#39;. &#39;text&#39; is default.</li>
+      <li><code>msg.payload.content</code> :
+        <Strong>(required String)</Strong> File content</li>
+      <li><code>msg.payload.commit_message</code> :
+        <Strong>(required String)</Strong> Commit message</li>
+    </ul>
+  </p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('GitLab-Create-RepositoryFile', {
+    category: 'GitLab',
+    defaults: {
+      name: {
+        value: ""
+      },
+      branch_name: {
+        value: ""
+      },
+      encoding: {
+        value: "text"
+      },
+      gitlabconfig: {
+        type: "gitlab-config",
+        required: true
+      }
+    },
+    color: "#a493d4",
+    inputs: 1,
+    outputs: 1,
+    icon: "gitlab_logo.svg",
+    label: function() {
+      return this.name || "GitLab Create RepositoryFile";
+    },
+    labelStyle: function() {
+      return this.name ? "node_label_italic" : "";
+    }
+  });
+</script>
+
+
+
+<!--
+  GitLab Update RepositoryFile
+-->
+<script type="text/x-red" data-template-name="GitLab-Update-RepositoryFile">
+  <div class="form-row">
+    <label for="node-input-gitlabconfig"><i class="fa fa-globe"></i> API Key</label>
+    <input type="text" id="node-input-gitlabconfig">
+  </div>
+  <div class="form-row">
+    <label for="node-input-branch_name"><i class="fa fa-tag"></i> Branch</label>
+    <input type="text" id="node-input-branch_name" placeholder="The name of branch,">
+  </div>
+  <div class="form-row">
+    <label for="node-input-encoding"><i class="fa fa-tag"></i> Encoding</label>
+    <select type="text" id="node-input-encoding">
+        <option value="text">text</option>
+        <option value="base64">base64</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="GitLab-Update-RepositoryFile">
+  <p>Update existing file in repository</p>
+  <p>
+    Set the following in the node setting or in the input payload.:
+    <ul>
+      <li><code>msg.payload.project_id</code> :
+        <Strong>(required Number)</Strong> The ID of a project</li>
+      <li><code>msg.payload.file_path</code> :
+        <Strong>(required String)</Strong> Full path to file. </li>
+      <li><code>msg.payload.branch_name</code> :
+        <Strong>(required String)</Strong> The name of branch</li>
+      <li><code>msg.payload.encoding</code> : (String) Select encoding to &#39;text&#39; or &#39;base64&#39;. &#39;text&#39; is default.</li>
+      <li><code>msg.payload.content</code> :
+        <Strong>(required String)</Strong> File content</li>
+      <li><code>msg.payload.commit_message</code> :
+        <Strong>(required String)</Strong> Commit message</li>
+    </ul>
+  </p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('GitLab-Update-RepositoryFile', {
+    category: 'GitLab',
+    defaults: {
+      name: {
+        value: ""
+      },
+      branch_name: {
+        value: ""
+      },
+      encoding: {
+        value: "text"
+      },
+      gitlabconfig: {
+        type: "gitlab-config",
+        required: true
+      }
+    },
+    color: "#a493d4",
+    inputs: 1,
+    outputs: 1,
+    icon: "gitlab_logo.svg",
+    label: function() {
+      return this.name || "GitLab Update RepositoryFile";
+    },
+    labelStyle: function() {
+      return this.name ? "node_label_italic" : "";
+    }
+  });
+</script>
+
+
+
+<!--
+  GitLab Remove RepositoryFile
+-->
+<script type="text/x-red" data-template-name="GitLab-Remove-RepositoryFile">
+  <div class="form-row">
+    <label for="node-input-gitlabconfig"><i class="fa fa-globe"></i> API Key</label>
+    <input type="text" id="node-input-gitlabconfig">
+  </div>
+  <div class="form-row">
+    <label for="node-input-branch_name"><i class="fa fa-tag"></i> Branch</label>
+    <input type="text" id="node-input-branch_name" placeholder="The name of branch,">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="GitLab-Remove-RepositoryFile">
+  <p>Delete existing file in repository</p>
+  <p>
+    Set the following in the node setting or in the input payload.:
+    <ul>
+      <li><code>msg.payload.project_id</code> :
+        <Strong>(required Number)</Strong> The ID of a project</li>
+      <li><code>msg.payload.file_path</code> :
+        <Strong>(required String)</Strong> Full path to file. </li>
+      <li><code>msg.payload.branch_name</code> :
+        <Strong>(required String)</Strong> The name of branch</li>
+      <li><code>msg.payload.commit_message</code> :
+        <Strong>(required String)</Strong> Commit message</li>
+    </ul>
+  </p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('GitLab-Remove-RepositoryFile', {
+    category: 'GitLab',
+    defaults: {
+      name: {
+        value: ""
+      },
+      branch_name: {
+        value: ""
+      },
+      gitlabconfig: {
+        type: "gitlab-config",
+        required: true
+      }
+    },
+    color: "#a493d4",
+    inputs: 1,
+    outputs: 1,
+    icon: "gitlab_logo.svg",
+    label: function() {
+      return this.name || "GitLab Remove RepositoryFile";
     },
     labelStyle: function() {
       return this.name ? "node_label_italic" : "";

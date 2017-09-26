@@ -24,6 +24,9 @@ The following functions(APIs) can be used:
 
 ### Repository Files
 * Get File : Get file from repository. Allows you to receive information about file in repository like name, size, content. Note that file content is Base64 encoded.
+* Create File : Create new file in repository
+* Update File : Update existing file in repository
+* Remove File : Delete existing file in repository
 
 ## Copyright and license
 

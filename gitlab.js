@@ -50,7 +50,7 @@ module.exports = function(RED) {
     this.on('input', function(msg) {
 
       // Update if MSG has a value
-      var project_id = node.gitlabConfig.project_id;
+      var project_id = Number(node.gitlabConfig.project_id);
       if (_isTypeOf('Number', msg.payload.project_id)) {
         project_id = msg.payload.project_id;
       }
@@ -115,7 +115,7 @@ module.exports = function(RED) {
     this.on('input', function(msg) {
 
       // Update if MSG has a value
-      var project_id = node.gitlabConfig.project_id;
+      var project_id = Number(node.gitlabConfig.project_id);
       if (_isTypeOf('Number', msg.payload.project_id)) {
         project_id = msg.payload.project_id;
       }
@@ -184,7 +184,7 @@ module.exports = function(RED) {
       var param = {};
 
       // Update if MSG has a value
-      var project_id = node.gitlabConfig.project_id;
+      var project_id = Number(node.gitlabConfig.project_id);
       if (_isTypeOf('Number', msg.payload.project_id)) {
         project_id = msg.payload.project_id;
       }
@@ -261,7 +261,7 @@ module.exports = function(RED) {
     this.on('input', function(msg) {
 
       // Update if MSG has a value
-      var project_id = node.gitlabConfig.project_id;
+      var project_id = Number(node.gitlabConfig.project_id);
       if (_isTypeOf('Number', msg.payload.project_id)) {
         project_id = msg.payload.project_id;
       }
@@ -306,7 +306,7 @@ module.exports = function(RED) {
     this.on('input', function(msg) {
 
       // Update if MSG has a value
-      var project_id = node.gitlabConfig.project_id;
+      var project_id = Number(node.gitlabConfig.project_id);
       if (_isTypeOf('Number', msg.payload.project_id)) {
         project_id = msg.payload.project_id;
       }
@@ -357,7 +357,7 @@ module.exports = function(RED) {
     this.on('input', function(msg) {
 
       // Update if MSG has a value
-      var project_id = node.gitlabConfig.project_id;
+      var project_id = Number(node.gitlabConfig.project_id);
       if (_isTypeOf('Number', msg.payload.project_id)) {
         project_id = msg.payload.project_id;
       }
@@ -403,7 +403,7 @@ module.exports = function(RED) {
 
 // === RepositoryFiles ========================================================
 /**
- * GitLab API List Notes
+ * GitLab Get RepositoryFile
  **/
 function GitLabGetRepositoryFile(n) {
   RED.nodes.createNode(this, n);
@@ -415,7 +415,7 @@ function GitLabGetRepositoryFile(n) {
   this.on('input', function(msg) {
 
     // Update if MSG has a value
-    var project_id = node.gitlabConfig.project_id;
+    var project_id = Number(node.gitlabConfig.project_id);
     if (_isTypeOf('Number', msg.payload.project_id)) {
       project_id = msg.payload.project_id;
     }
@@ -451,6 +451,225 @@ function GitLabGetRepositoryFile(n) {
   });
 }
 RED.nodes.registerType("GitLab-Get-RepositoryFile", GitLabGetRepositoryFile);
+
+
+
+/**
+ * GitLab Create RepositoryFile
+ **/
+function GitLabCreateRepositoryFile(n) {
+  RED.nodes.createNode(this, n);
+
+  this.gitlabConfig = RED.nodes.getNode(n.gitlabconfig);
+  this.branch_name = n.branch_name;
+  this.encoding = n.encoding;
+
+  var node = this;
+  this.on('input', function(msg) {
+
+
+    var param = {};
+
+    // Update if MSG has a value
+    var project_id = Number(node.gitlabConfig.project_id);
+    if (_isTypeOf('Number', msg.payload.project_id)) {
+      project_id = msg.payload.project_id;
+    }
+    if (_isTypeOf('Number', project_id)) {
+      param.id = project_id;
+    }
+    var branch_name = node.branch_name;
+    if (_isTypeOf('String', msg.payload.branch_name)) {
+      branch_name = msg.payload.branch_name;
+    }
+    if (_isTypeOf('String', branch_name)) {
+      param.branch_name = branch_name;
+    }
+    var encoding = node.encoding;
+    if (_isTypeOf('String', msg.payload.encoding)) {
+      encoding = msg.payload.encoding;
+    }
+    if (_isTypeOf('String', encoding)) {
+      if (encoding === "base64") {
+        param.encoding = encoding;
+      }
+    }
+
+    var file_path;
+    if (_isTypeOf('String', msg.payload.file_path)) {
+      file_path = msg.payload.file_path;
+      param.file_path = file_path;
+    }
+    var content;
+    if (_isTypeOf('String', msg.payload.content)) {
+      content = msg.payload.content;
+      param.content = content;
+    }
+    var commit_message;
+    if (_isTypeOf('String', msg.payload.commit_message)) {
+      commit_message = msg.payload.commit_message;
+      param.commit_message = commit_message;
+    }
+
+    var client = gitlab.create({
+      api: node.gitlabConfig.url,
+      privateToken: node.gitlabConfig.key
+    });
+    client.repositoryFiles.create(param, function(error, body) {
+      if (!error) {
+        msg.payload = body;
+        node.send(msg);
+        node.log(RED._('Succeeded to API Call.'));
+      } else {
+        console.log(error);
+        node.error("Failed to API Call. " + error);
+      }
+    });
+
+  });
+}
+RED.nodes.registerType("GitLab-Create-RepositoryFile", GitLabCreateRepositoryFile);
+
+
+
+/**
+ * GitLab Update RepositoryFile
+ **/
+function GitLabUpdateRepositoryFile(n) {
+  RED.nodes.createNode(this, n);
+
+  this.gitlabConfig = RED.nodes.getNode(n.gitlabconfig);
+  this.branch_name = n.branch_name;
+  this.encoding = n.encoding;
+
+  var node = this;
+  this.on('input', function(msg) {
+
+
+    var param = {};
+
+    // Update if MSG has a value
+    var project_id = Number(node.gitlabConfig.project_id);
+    if (_isTypeOf('Number', msg.payload.project_id)) {
+      project_id = msg.payload.project_id;
+    }
+    if (_isTypeOf('Number', project_id)) {
+      param.id = project_id;
+    }
+    var branch_name = node.branch_name;
+    if (_isTypeOf('String', msg.payload.branch_name)) {
+      branch_name = msg.payload.branch_name;
+    }
+    if (_isTypeOf('String', branch_name)) {
+      param.branch_name = branch_name;
+    }
+    var encoding = node.encoding;
+    if (_isTypeOf('String', msg.payload.encoding)) {
+      encoding = msg.payload.encoding;
+    }
+    if (_isTypeOf('String', encoding)) {
+      if (encoding === "base64") {
+        param.encoding = encoding;
+      }
+    }
+
+    var file_path;
+    if (_isTypeOf('String', msg.payload.file_path)) {
+      file_path = msg.payload.file_path;
+      param.file_path = file_path;
+    }
+    var content;
+    if (_isTypeOf('String', msg.payload.content)) {
+      content = msg.payload.content;
+      param.content = content;
+    }
+    var commit_message;
+    if (_isTypeOf('String', msg.payload.commit_message)) {
+      commit_message = msg.payload.commit_message;
+      param.commit_message = commit_message;
+    }
+
+    var client = gitlab.create({
+      api: node.gitlabConfig.url,
+      privateToken: node.gitlabConfig.key
+    });
+    client.repositoryFiles.update(param, function(error, body) {
+      if (!error) {
+        msg.payload = body;
+        node.send(msg);
+        node.log(RED._('Succeeded to API Call.'));
+      } else {
+        console.log(error);
+        node.error("Failed to API Call. " + error);
+      }
+    });
+
+  });
+}
+RED.nodes.registerType("GitLab-Update-RepositoryFile", GitLabUpdateRepositoryFile);
+
+
+
+/**
+ * GitLab Remove RepositoryFile
+ **/
+function GitLabRemoveRepositoryFile(n) {
+  RED.nodes.createNode(this, n);
+
+  this.gitlabConfig = RED.nodes.getNode(n.gitlabconfig);
+  this.branch_name = n.branch_name;
+
+  var node = this;
+  this.on('input', function(msg) {
+
+
+    var param = {};
+
+    // Update if MSG has a value
+    var project_id = Number(node.gitlabConfig.project_id);
+    if (_isTypeOf('Number', msg.payload.project_id)) {
+      project_id = msg.payload.project_id;
+    }
+    if (_isTypeOf('Number', project_id)) {
+      param.id = project_id;
+    }
+    var branch_name = node.branch_name;
+    if (_isTypeOf('String', msg.payload.branch_name)) {
+      branch_name = msg.payload.branch_name;
+    }
+    if (_isTypeOf('String', branch_name)) {
+      param.branch_name = branch_name;
+    }
+
+    var file_path;
+    if (_isTypeOf('String', msg.payload.file_path)) {
+      file_path = msg.payload.file_path;
+      param.file_path = file_path;
+    }
+    var commit_message;
+    if (_isTypeOf('String', msg.payload.commit_message)) {
+      commit_message = msg.payload.commit_message;
+      param.commit_message = commit_message;
+    }
+
+    var client = gitlab.create({
+      api: node.gitlabConfig.url,
+      privateToken: node.gitlabConfig.key
+    });
+    client.repositoryFiles.remove(param, function(error, body) {
+      if (!error) {
+        msg.payload = body;
+        node.send(msg);
+        node.log(RED._('Succeeded to API Call.'));
+      } else {
+        console.log(error);
+        node.error("Failed to API Call. " + error);
+      }
+    });
+
+  });
+}
+RED.nodes.registerType("GitLab-Remove-RepositoryFile", GitLabRemoveRepositoryFile);
 
 
   /**
