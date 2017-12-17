@@ -93,8 +93,12 @@ module.exports = function(RED) {
           node.send(msg);
           node.log(RED._('Succeeded to API Call.'));
         } else {
-          console.log(error);
-          node.error("Failed to API Call. " + error);
+          var myErr = {
+            "inputMessage" : msg,
+            "error" : error
+          };
+          console.log(myErr);
+          node.error("Failed to API Call. " + error, myErr);
         }
       });
 
@@ -158,8 +162,12 @@ module.exports = function(RED) {
           node.send(msg);
           node.log(RED._('Succeeded to API Call.'));
         } else {
-          console.log(error);
-          node.error("Failed to API Call. " + error);
+          var myErr = {
+            "inputMessage" : msg,
+            "error" : error
+          };
+          console.log(myErr);
+          node.error("Failed to API Call. " + error, myErr);
         }
       });
 
@@ -238,8 +246,12 @@ module.exports = function(RED) {
           node.send(msg);
           node.log(RED._('Succeeded to API Call.'));
         } else {
-          console.log(error);
-          node.error("Failed to API Call. " + error);
+          var myErr = {
+            "inputMessage" : msg,
+            "error" : error
+          };
+          console.log(myErr);
+          node.error("Failed to API Call. " + error, myErr);
         }
       });
 
@@ -284,8 +296,12 @@ module.exports = function(RED) {
           node.send(msg);
           node.log(RED._('Succeeded to API Call.'));
         } else {
-          console.log(error);
-          node.error("Failed to API Call. " + error);
+          var myErr = {
+            "inputMessage" : msg,
+            "error" : error
+          };
+          console.log(myErr);
+          node.error("Failed to API Call. " + error, myErr);
         }
       });
 
@@ -334,8 +350,12 @@ module.exports = function(RED) {
           node.send(msg);
           node.log(RED._('Succeeded to API Call.'));
         } else {
-          console.log(error);
-          node.error("Failed to API Call. " + error);
+          var myErr = {
+            "inputMessage" : msg,
+            "error" : error
+          };
+          console.log(myErr);
+          node.error("Failed to API Call. " + error, myErr);
         }
       });
 
@@ -390,8 +410,12 @@ module.exports = function(RED) {
           node.send(msg);
           node.log(RED._('Succeeded to API Call.'));
         } else {
-          console.log(error);
-          node.error("Failed to API Call. " + error);
+          var myErr = {
+            "inputMessage" : msg,
+            "error" : error
+          };
+          console.log(myErr);
+          node.error("Failed to API Call. " + error, myErr);
         }
       });
 
@@ -443,8 +467,12 @@ function GitLabGetRepositoryFile(n) {
         node.send(msg);
         node.log(RED._('Succeeded to API Call.'));
       } else {
-        console.log(error);
-        node.error("Failed to API Call. " + error);
+        var myErr = {
+          "inputMessage" : msg,
+          "error" : error
+        };
+        console.log(myErr);
+        node.error("Failed to API Call. " + error, myErr);
       }
     });
 
@@ -521,8 +549,12 @@ function GitLabCreateRepositoryFile(n) {
         node.send(msg);
         node.log(RED._('Succeeded to API Call.'));
       } else {
-        console.log(error);
-        node.error("Failed to API Call. " + error);
+        var myErr = {
+          "inputMessage" : msg,
+          "error" : error
+        };
+        console.log(myErr);
+        node.error("Failed to API Call. " + error, myErr);
       }
     });
 
@@ -599,8 +631,12 @@ function GitLabUpdateRepositoryFile(n) {
         node.send(msg);
         node.log(RED._('Succeeded to API Call.'));
       } else {
-        console.log(error);
-        node.error("Failed to API Call. " + error);
+        var myErr = {
+          "inputMessage" : msg,
+          "error" : error
+        };
+        console.log(myErr);
+        node.error("Failed to API Call. " + error, myErr);
       }
     });
 
@@ -662,8 +698,12 @@ function GitLabRemoveRepositoryFile(n) {
         node.send(msg);
         node.log(RED._('Succeeded to API Call.'));
       } else {
-        console.log(error);
-        node.error("Failed to API Call. " + error);
+        var myErr = {
+          "inputMessage" : msg,
+          "error" : error
+        };
+        console.log(myErr);
+        node.error("Failed to API Call. " + error, myErr);
       }
     });
 
