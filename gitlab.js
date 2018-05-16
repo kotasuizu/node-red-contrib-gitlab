@@ -10,6 +10,17 @@ module.exports = function(RED) {
   "use strict";
   var gitlab = require('node-gitlab');
 
+
+  /*
+      One function to handle all the errors
+  */
+  function requestFail(node, msg, body, err) {
+    const error = err.toString();
+    msg.payload = error;
+    msg.statusCode = parseInt(error.split("Error")[0].replace("Gitlab", ""));
+    node.error(error, msg);
+  }
+
   /**
    * GitLab API Config
    **/
@@ -90,16 +101,11 @@ module.exports = function(RED) {
       }, function(error, body) {
         if (!error) {
           msg.payload = body;
-          node.send(msg);
           node.log(RED._('Succeeded to API Call.'));
         } else {
-          var myErr = {
-            "inputMessage" : msg,
-            "error" : error
-          };
-          console.log(myErr);
-          node.error("Failed to API Call. " + error, myErr);
+          requestFail(node, msg, body, error);
         }
+        node.send(msg);
       });
 
     });
@@ -159,16 +165,11 @@ module.exports = function(RED) {
       }, function(error, body) {
         if (!error) {
           msg.payload = body;
-          node.send(msg);
           node.log(RED._('Succeeded to API Call.'));
         } else {
-          var myErr = {
-            "inputMessage" : msg,
-            "error" : error
-          };
-          console.log(myErr);
-          node.error("Failed to API Call. " + error, myErr);
+          requestFail(node, msg, body, error);
         }
+        node.send(msg);
       });
 
     });
@@ -243,16 +244,11 @@ module.exports = function(RED) {
       client.issues.update(param, function(error, body) {
         if (!error) {
           msg.payload = body;
-          node.send(msg);
           node.log(RED._('Succeeded to API Call.'));
         } else {
-          var myErr = {
-            "inputMessage" : msg,
-            "error" : error
-          };
-          console.log(myErr);
-          node.error("Failed to API Call. " + error, myErr);
+          requestFail(node, msg, body, error);
         }
+        node.send(msg);
       });
 
     });
@@ -293,16 +289,11 @@ module.exports = function(RED) {
       }, function(error, body) {
         if (!error) {
           msg.payload = body;
-          node.send(msg);
           node.log(RED._('Succeeded to API Call.'));
         } else {
-          var myErr = {
-            "inputMessage" : msg,
-            "error" : error
-          };
-          console.log(myErr);
-          node.error("Failed to API Call. " + error, myErr);
+          requestFail(node, msg, body, error);
         }
+        node.send(msg);
       });
 
     });
@@ -347,16 +338,11 @@ module.exports = function(RED) {
       }, function(error, body) {
         if (!error) {
           msg.payload = body;
-          node.send(msg);
           node.log(RED._('Succeeded to API Call.'));
         } else {
-          var myErr = {
-            "inputMessage" : msg,
-            "error" : error
-          };
-          console.log(myErr);
-          node.error("Failed to API Call. " + error, myErr);
+          requestFail(node, msg, body, error);
         }
+        node.send(msg);
       });
 
     });
@@ -407,16 +393,11 @@ module.exports = function(RED) {
       }, function(error, body) {
         if (!error) {
           msg.payload = body;
-          node.send(msg);
           node.log(RED._('Succeeded to API Call.'));
         } else {
-          var myErr = {
-            "inputMessage" : msg,
-            "error" : error
-          };
-          console.log(myErr);
-          node.error("Failed to API Call. " + error, myErr);
+          requestFail(node, msg, body, error);
         }
+        node.send(msg);
       });
 
     });
@@ -464,16 +445,11 @@ function GitLabGetRepositoryFile(n) {
     }, function(error, body) {
       if (!error) {
         msg.payload = body;
-        node.send(msg);
         node.log(RED._('Succeeded to API Call.'));
       } else {
-        var myErr = {
-          "inputMessage" : msg,
-          "error" : error
-        };
-        console.log(myErr);
-        node.error("Failed to API Call. " + error, myErr);
+        requestFail(node, msg, body, error);
       }
+      node.send(msg);
     });
 
   });
@@ -546,16 +522,11 @@ function GitLabCreateRepositoryFile(n) {
     client.repositoryFiles.create(param, function(error, body) {
       if (!error) {
         msg.payload = body;
-        node.send(msg);
         node.log(RED._('Succeeded to API Call.'));
       } else {
-        var myErr = {
-          "inputMessage" : msg,
-          "error" : error
-        };
-        console.log(myErr);
-        node.error("Failed to API Call. " + error, myErr);
+        requestFail(node, msg, body, error);
       }
+      node.send(msg);
     });
 
   });
@@ -628,16 +599,11 @@ function GitLabUpdateRepositoryFile(n) {
     client.repositoryFiles.update(param, function(error, body) {
       if (!error) {
         msg.payload = body;
-        node.send(msg);
         node.log(RED._('Succeeded to API Call.'));
       } else {
-        var myErr = {
-          "inputMessage" : msg,
-          "error" : error
-        };
-        console.log(myErr);
-        node.error("Failed to API Call. " + error, myErr);
+        requestFail(node, msg, body, error);
       }
+      node.send(msg);
     });
 
   });
@@ -695,16 +661,11 @@ function GitLabRemoveRepositoryFile(n) {
     client.repositoryFiles.remove(param, function(error, body) {
       if (!error) {
         msg.payload = body;
-        node.send(msg);
         node.log(RED._('Succeeded to API Call.'));
       } else {
-        var myErr = {
-          "inputMessage" : msg,
-          "error" : error
-        };
-        console.log(myErr);
-        node.error("Failed to API Call. " + error, myErr);
+        requestFail(node, msg, body, error);
       }
+      node.send(msg);
     });
 
   });
